@@ -15,19 +15,15 @@ async function convertToJson() {
   )
   csv().fromFile(csvFile)
     .subscribe((json) => {
-      new Promise((resolve, reject) => {
-        fs.appendFile(
-          txtFile,
-          `${JSON.stringify(json)}${EOL}`,
-          (err) => {
-            if (err) {
-              console.error(err);
-              reject();
-            }
+      fs.appendFile(
+        txtFile,
+        `${JSON.stringify(json)}${EOL}`,
+        (err) => {
+          if (err) {
+            console.error(err);
           }
-        );
-        resolve();
-      })
+        }
+      );
     })
     .on('done', (error) => {
       console.log('File was successfully created');
