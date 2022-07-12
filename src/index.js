@@ -6,29 +6,20 @@ var EOL = require('os').EOL;
 async function convertToJson() {
   var csvFile = path.join(__dirname, 'csv/node1.csv');
   var txtFile = path.join(__dirname, 'node1.txt');
-  fs.writeFileSync(
-    txtFile,
+  fs.writeFileSync(txtFile,
     "",
-    (err) => {
+    function (err) {
       if (err) console.error(err);
-    }
-  )
-  csv().fromFile(csvFile)
-    .subscribe((json) => {
-      fs.appendFile(
-        txtFile,
-        `${JSON.stringify(json)}${EOL}`,
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
-    })
-    .on('done', (error) => {
-      console.log('File was successfully created');
-    })
-    .on('error', console.error)
+    });
+  csv().fromFile(csvFile).subscribe(function (json) {
+    fs.appendFile(txtFile, "".concat(JSON.stringify(json)).concat(EOL), function (err) {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }).on('done', function () {
+    console.log('File was successfully created');
+  }).on('error', console.error);
 }
 
 convertToJson();
