@@ -1,36 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
+  private users: User[] = [];
+
   create(createUserDto: CreateUserDto) {
-    return `This action adds a new user with ${JSON.stringify(
-      createUserDto,
-    )} fields`;
+    this.users.push({
+      ...createUserDto,
+      id: uuidv4(),
+    });
+    return this.users.at(-1);
   }
 
-  findAll(limit: number, offset: number) {
-    return `This action returns all users with pagination limit: ${limit}, offset: ${offset}`;
+  findAll(limit = 0, offset = 0) {
+    const arrUsers = this.users.filter((user) => !user.isDeleted);
+    if (!limit) {
+      return arrUsers;
+    }
+    return arrUsers.slice((offset - 1) * limit, offset * limit);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.users.find((user) => user.id === id && !user.isDeleted);
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user, with ${JSON.stringify(
-      updateUserDto,
-    )} fields`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    const i = this.users.findIndex((user) => user.id === id);
+    if (i === -1) return null;
+    this.users[i] = {
+      ...this.users[i],
+      ...updateUserDto,
+    };
+    return this.users[i];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    const i = this.users.findIndex((user) => user.id === id);
+    if (i === -1) return null;
+    this.users[i].isDeleted = true;
+    return this.users[i];
   }
 }
