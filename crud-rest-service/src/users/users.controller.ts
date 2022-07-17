@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -29,17 +30,38 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findOne(@Param('id') id: string, @Res() response) {
+    const user = this.usersService.findOne(id);
+    if (!user) {
+      return response.status(404).send('Not Found');
+    }
+    return response.status(200).send(user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Res() response,
+  ) {
+    const user = this.usersService.findOne(id);
+    if (!user) {
+      return response.status(404).send('Not Found');
+    }
+    const updUser = this.usersService.update(id, updateUserDto);
+    return response.status(200).send(updUser);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  remove(@Param('id') id: string, @Res() response) {
+    const user = this.usersService.findOne(id);
+    if (!user) {
+      return response.status(404).send('Not Found');
+    }
+    this.usersService.remove(id);
+    if (user.isDeleted) {
+      return response.status(200).send('The object was successfully deleted');
+    }
+    return response.status(404).send('Not Found');
   }
 }
