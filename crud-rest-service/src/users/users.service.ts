@@ -29,7 +29,7 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const i = this.users.findIndex((user) => user.id === id);
+    const i = this.users.findIndex((user) => user.id === id && !user.isDeleted);
     if (i === -1) return null;
     this.users[i] = {
       ...this.users[i],
@@ -39,7 +39,7 @@ export class UsersService {
   }
 
   remove(id: string) {
-    const i = this.users.findIndex((user) => user.id === id);
+    const i = this.users.findIndex((user) => user.id === id && !user.isDeleted);
     if (i === -1) return null;
     this.users[i].isDeleted = true;
     return this.users[i];
