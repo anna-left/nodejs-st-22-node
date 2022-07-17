@@ -8,11 +8,13 @@ import {
   Delete,
   Query,
   Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { LoginSubstringUserDto } from './dto/getLoginSubstring-user.dto';
 
 @Controller('v1/users')
 export class UsersController {
@@ -33,9 +35,21 @@ export class UsersController {
   findOne(@Param('id') id: string, @Res() response) {
     const user = this.usersService.findOne(id);
     if (!user) {
-      return response.status(404).send('Not Found');
+      return response.status(HttpStatus.NO_CONTENT).send('Not Found');
     }
-    return response.status(200).send(user);
+    return response.status(HttpStatus.OK).send(user);
+  }
+
+  @Get('/limitusers/:limit')
+  getAutoSuggestUsers(
+    @Body() loginSubstringUserDto: LoginSubstringUserDto,
+    @Res() response,
+  ) {
+    const users = this.usersService.getAutoSuggestUsers(loginSubstringUserDto);
+    if (!UsersController) {
+      return response.status(HttpStatus.NO_CONTENT).send('Not Found');
+    }
+    return response.status(HttpStatus.OK).send(users);
   }
 
   @Patch(':id')
@@ -46,22 +60,24 @@ export class UsersController {
   ) {
     const user = this.usersService.findOne(id);
     if (!user) {
-      return response.status(404).send('Not Found');
+      return response.status(HttpStatus.NO_CONTENT).send('Not Found');
     }
     const updUser = this.usersService.update(id, updateUserDto);
-    return response.status(200).send(updUser);
+    return response.status(HttpStatus.OK).send(updUser);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @Res() response) {
     const user = this.usersService.findOne(id);
     if (!user) {
-      return response.status(404).send('Not Found');
+      return response.status(HttpStatus.NO_CONTENT).send('Not Found');
     }
     this.usersService.remove(id);
     if (user.isDeleted) {
-      return response.status(200).send('The object was successfully deleted');
+      return response
+        .status(HttpStatus.OK)
+        .send('The object was successfully deleted');
     }
-    return response.status(404).send('Not Found');
+    return response.status(HttpStatus.NO_CONTENT).send('Not Found');
   }
 }
