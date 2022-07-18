@@ -3,7 +3,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { compare } from 'src/utils/sort';
 import { LoginSubstringUserDto } from './dto/getLoginSubstring-user.dto';
 
 @Injectable()
@@ -34,7 +33,7 @@ export class UsersService {
     const arrUsers = this.users.filter((user) =>
       user.login.includes(loginSubstringUserDto.loginSubstring),
     );
-    return arrUsers.sort(compare).slice(0, loginSubstringUserDto.limit);
+    return arrUsers.sort(this.compare).slice(0, loginSubstringUserDto.limit);
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
@@ -45,6 +44,16 @@ export class UsersService {
       ...updateUserDto,
     };
     return this.users[i];
+  }
+
+  compare(user1: User, user2: User) {
+    if (user1.login < user2.login) {
+      return -1;
+    }
+    if (user1.login > user2.login) {
+      return 1;
+    }
+    return 0;
   }
 
   remove(id: string) {
