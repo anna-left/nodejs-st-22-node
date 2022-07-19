@@ -1,25 +1,30 @@
-import { IsBoolean, IsNumber, IsString, Max, Min } from 'class-validator';
+import Joi from 'joi';
+
+import { IsString, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
-  @IsNotEmpty()
   readonly login: string;
 
   @IsString()
-  @IsEmail()
-  @IsNotEmpty()
   readonly email: string;
 
   @IsString()
   readonly password: string;
 
   @IsNumber()
-  @IsNotEmpty()
-  @Min(4)
-  @Max(130)
   readonly age: number;
 
   @IsBoolean()
-  @IsNotEmpty()
   readonly isDeleted: boolean;
 }
+
+export const UserSchema = Joi.object({
+  login: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().alphanum().required(),
+  age: Joi.number().integer().min(4).max(130).required(),
+  isDeleted: Joi.boolean().required(),
+}).options({
+  abortEarly: false,
+});
