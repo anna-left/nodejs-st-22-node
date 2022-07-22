@@ -31,7 +31,7 @@ export class UsersController {
     @Res() response,
   ) {
     const users = this.usersService.getAutoSuggestUsers(loginSubstringUserDto);
-    if (!UsersController) {
+    if (!users) {
       return response.status(HttpStatus.NOT_FOUND).send('Not Found');
     }
     return response.status(HttpStatus.OK).send(users);
