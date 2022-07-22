@@ -91,7 +91,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"loginSubstring\": \"Marcos\",\r\n  \"limit\": 5\r\n}",
+					"raw": "{\r\n  \"loginSubstring\": \"John\",\r\n  \"limit\": 5\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -126,7 +126,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"login\": \"111Marcos\",\r\n  \"email\": \"mail@gmail.com\",\r\n  \"password\": \"www\",\r\n  \"age\": 13,\r\n  \"isDeleted\": false\r\n}",
+					"raw": "{\r\n  \"login\": \"John\",\r\n  \"email\": \"john@gmail.com\",\r\n  \"password\": \"www111\",\r\n  \"age\": 26,\r\n  \"isDeleted\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -195,7 +195,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"login\": \"Marcos\",\r\n  \"email\": \"mail@gmail.com\",\r\n  \"password\": \"www\",\r\n  \"age\": 23,\r\n  \"isDeleted\": false\r\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "localhost:3000/v1/users/36bdd88c-a5f3-4352-b1db-069e51c24fde",
